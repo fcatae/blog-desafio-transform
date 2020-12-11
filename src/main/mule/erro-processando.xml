@@ -34,6 +34,7 @@ payload]]></ee:set-payload>
 }]]]></http:headers>
 			</http:error-response>
 		</http:listener>
-		<raise-error doc:name="Raise error" doc:id="99344957-2113-4eb0-b325-58d78489b37c" type="APP:ERRO" description="Erro de processamento"/>
+		<raise-error doc:name="Raise error" doc:id="99344957-2113-4eb0-b325-58d78489b37c" type="APP:ERRO" description="Erro de processamento" />
+		<set-payload value="Sucesso" doc:name="Set Payload" doc:id="4e2dfec1-d0f9-4fc7-aa31-f23df8d501f6" mimeType="application/json"/>
 	</flow>
 </mule>
