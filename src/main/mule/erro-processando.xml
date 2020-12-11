@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="4911f9cd-db2c-46eb-bac9-1fdc543f78fe" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="erro-processandoFlow" doc:id="e02ec088-0aa7-404a-81de-c09bd17596f1" >
+		<http:listener doc:name="Listener" doc:id="a6f8e082-1883-4dde-80eb-7d7ad62e9bc1" config-ref="HTTP_Listener_config" path="/*"/>
+		<http:request method="GET" doc:name="Request" doc:id="1eda9323-a645-43dc-9ace-b88468a472bb" url="http://localhost:8081/processo">
+			<http:response-validator >
+				<http:success-status-code-validator values="200..599" />
+			</http:response-validator>
+		</http:request>
+		<ee:transform doc:name="Transform Message" doc:id="a2b4fa28-ba29-4d6a-b078-a3f82a40a8cb" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="httpProcessoFlow" doc:id="99d737e7-4499-494b-a00d-3c0cc9caca46" >
+		<http:listener doc:name="Listener" doc:id="e6ec3e5c-9a41-4726-a973-6a958523cc12" config-ref="HTTP_Listener_config" path="/processo">
+			<http:error-response >
+				<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Content-type" : "application/json"
+}]]]></http:headers>
+			</http:error-response>
+		</http:listener>
+		<raise-error doc:name="Raise error" doc:id="99344957-2113-4eb0-b325-58d78489b37c" type="APP:ERRO" description="Erro de processamento"/>
+	</flow>
+</mule>
