@@ -17,10 +17,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		</http:request>
 		<ee:transform doc:name="Transform Message" doc:id="a2b4fa28-ba29-4d6a-b078-a3f82a40a8cb" >
 			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
----
-payload]]></ee:set-payload>
+				<ee:set-payload ><![CDATA[output application/json --- payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 	</flow>
